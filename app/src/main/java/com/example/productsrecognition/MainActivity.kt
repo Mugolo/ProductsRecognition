@@ -61,8 +61,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
         descriptor = DescriptorExtractor.create(DescriptorExtractor.ORB)
         matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMING)
         img1 = Mat()
-        val assetManager = assets
-        val istr = assetManager.open("a.jpg")
+        val istr = assets.open("a.jpg")
         val bitmap = BitmapFactory.decodeStream(istr)
         Utils.bitmapToMat(bitmap, img1)
         Imgproc.cvtColor(img1, img1, Imgproc.COLOR_RGB2GRAY)
@@ -79,18 +78,21 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(TAG, "called onCreate")
+        setContentView(R.layout.activity_main)
 
+        requestPermissions()
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        mOpenCvCameraView.setCvCameraViewListener(this)
+
+    }
+
+    private fun requestPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_DENIED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(Array(1) { Manifest.permission.CAMERA }, 1234)
             }
         }
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.activity_main)
-        mOpenCvCameraView.setCvCameraViewListener(this)
-
     }
 
     public override fun onPause() {
@@ -102,7 +104,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
         super.onResume()
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization")
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback)
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_4_0, this, mLoaderCallback)
         } else {
             Log.d(TAG, "OpenCV library found inside package. Using it!")
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
