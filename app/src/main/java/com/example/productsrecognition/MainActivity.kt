@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.SurfaceView
 import android.view.WindowManager
-import android.widget.TextView
 import org.opencv.android.*
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame
 import org.opencv.core.*
@@ -22,7 +21,6 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
     private var w: Int = 0
     private var h: Int = 0
     private lateinit var mOpenCvCameraView: CameraBridgeViewBase
-    private lateinit var tvName: TextView
     private var RED = Scalar(255.0, 0.0, 0.0)
     private var GREEN = Scalar(0.0, 255.0, 0.0)
     private lateinit var detector: FeatureDetector
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
             when (status) {
                 LoaderCallbackInterface.SUCCESS -> {
                     Log.i(TAG, "OpenCV loaded successfully")
-                    mOpenCvCameraView!!.enableView()
+                    mOpenCvCameraView.enableView()
                     try {
                         initializeOpenCVDependencies()
                     } catch (e: IOException) {
@@ -55,7 +53,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
 
     @Throws(IOException::class)
     private fun initializeOpenCVDependencies() {
-        mOpenCvCameraView!!.enableView()
+        mOpenCvCameraView.enableView()
         detector = FeatureDetector.create(FeatureDetector.ORB)
         descriptor = DescriptorExtractor.create(DescriptorExtractor.ORB)
         matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMING)
@@ -82,15 +80,14 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_main)
-        mOpenCvCameraView!!.visibility = SurfaceView.VISIBLE
-        mOpenCvCameraView!!.setCvCameraViewListener(this)
+        mOpenCvCameraView.visibility = SurfaceView.VISIBLE
+        mOpenCvCameraView.setCvCameraViewListener(this)
 
     }
 
     public override fun onPause() {
         super.onPause()
-        if (mOpenCvCameraView != null)
-            mOpenCvCameraView!!.disableView()
+            mOpenCvCameraView.disableView()
     }
 
     public override fun onResume() {
@@ -106,7 +103,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
 
     public override fun onDestroy() {
         super.onDestroy()
-        mOpenCvCameraView!!.disableView()
+        mOpenCvCameraView.disableView()
     }
 
     override fun onCameraViewStarted(width: Int, height: Int) {
