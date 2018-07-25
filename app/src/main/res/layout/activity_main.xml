@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:opencv="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <org.opencv.android.JavaCameraView
+        android:id="@+id/mOpenCvCameraView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:screenOrientation="portrait"
+        android:visibility="gone"
+        opencv:camera_id="any"
+        opencv:show_fps="true" />
+
     <TextView
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="#00ff00"
+        android:gravity="center"
+        android:text="test"
+        android:textColor="#ff00ff"
+        android:textColorHighlight="#000000"
+        android:textIsSelectable="true"
+        android:textSize="32sp"
+        android:textStyle="bold" />
 
 </android.support.constraint.ConstraintLayout>
