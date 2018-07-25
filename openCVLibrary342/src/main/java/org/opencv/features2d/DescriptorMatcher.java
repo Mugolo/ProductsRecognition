@@ -224,7 +224,14 @@ public class DescriptorMatcher extends Algorithm {
         
         return;
     }
+    public  void matchEdited(Mat object_desc, Mat scene_desc, MatOfDMatch matches)
+    {
+        if(object_desc.type() == scene_desc.type() &&
+                object_desc.cols() == scene_desc.cols()) {
+            match_1(nativeObj, object_desc.nativeObj, scene_desc.nativeObj, matches.nativeObj);
+        }
 
+    }
 
     //
     // C++:  void match(Mat queryDescriptors, vector_DMatch& matches, vector_Mat masks = vector_Mat())

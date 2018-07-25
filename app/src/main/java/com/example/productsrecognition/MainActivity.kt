@@ -1,11 +1,15 @@
 package com.example.productsrecognition
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.SurfaceView
 import android.view.WindowManager
+import kotlinx.android.synthetic.main.activity_main.*
 import org.opencv.android.*
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame
 import org.opencv.core.*
@@ -20,7 +24,6 @@ import java.util.*
 class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListener2 {
     private var w: Int = 0
     private var h: Int = 0
-    private lateinit var mOpenCvCameraView: CameraBridgeViewBase
     private var RED = Scalar(255.0, 0.0, 0.0)
     private var GREEN = Scalar(0.0, 255.0, 0.0)
     private lateinit var detector: FeatureDetector
@@ -59,7 +62,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
         matcher = DescriptorMatcher.create(DescriptorMatcher.BRUTEFORCE_HAMMING)
         img1 = Mat()
         val assetManager = assets
-        val istr = assetManager.open("a.jpeg")
+        val istr = assetManager.open("a.jpg")
         val bitmap = BitmapFactory.decodeStream(istr)
         Utils.bitmapToMat(bitmap, img1)
         Imgproc.cvtColor(img1, img1, Imgproc.COLOR_RGB2GRAY)
@@ -75,19 +78,24 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-
-        Log.i(TAG, "called onCreate")
         super.onCreate(savedInstanceState)
+        Log.i(TAG, "called onCreate")
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(Array(1) { Manifest.permission.CAMERA }, 1234)
+            }
+        }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_main)
-        mOpenCvCameraView.visibility = SurfaceView.VISIBLE
         mOpenCvCameraView.setCvCameraViewListener(this)
 
     }
 
     public override fun onPause() {
         super.onPause()
-            mOpenCvCameraView.disableView()
+        mOpenCvCameraView.disableView()
     }
 
     public override fun onResume() {
@@ -124,7 +132,7 @@ class MainActivity : AppCompatActivity(), CameraBridgeViewBase.CvCameraViewListe
         // Matching
         val matches = MatOfDMatch()
         if (img1.type() == aInputFrame.type()) {
-            matcher.match(descriptors1, descriptors2, matches)
+            matcher.matchEdited(descriptors1, descriptors2, matches)
         } else {
             return aInputFrame
         }
