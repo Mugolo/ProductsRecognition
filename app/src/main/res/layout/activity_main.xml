@@ -6,26 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <org.opencv.android.JavaCameraView
-        android:id="@+id/mOpenCvCameraView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:screenOrientation="portrait"
-        android:visibility="visible"
-        opencv:camera_id="any"
-        opencv:show_fps="true" />
+    <!--<org.opencv.android.JavaCameraView-->
+        <!--android:id="@+id/mOpenCvCameraView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:screenOrientation="portrait"-->
+        <!--android:visibility="visible"-->
+        <!--opencv:camera_id="any"-->
+        <!--opencv:show_fps="true" />-->
 
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00ff00"
-        android:gravity="center"
-        android:text="test"
-        android:textColor="#ff00ff"
-        android:textColorHighlight="#000000"
-        android:textIsSelectable="true"
-        android:textSize="32sp"
-        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/pictureTaken"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#fff"
+        android:clickable="true"
+        android:focusable="true"
+        opencv:layout_constraintLeft_toLeftOf="parent"
+        opencv:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
